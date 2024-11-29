@@ -80,3 +80,15 @@ std::vector<Value> topk_1d(SPUContext *ctx, const spu::Value &input,
                            const TopKConfig &config);
 
 }  // namespace spu::kernel::hal
+
+namespace spu::kernel::hal::internal {
+
+std::vector<spu::Value> _apply_inv_perm_ss(SPUContext *ctx,
+                                           absl::Span<const spu::Value> x,
+                                           const spu::Value &perm);
+
+std::vector<spu::Value> radix_sort(SPUContext* ctx,
+                                   absl::Span<spu::Value const> inputs,
+                                   SortDirection direction, int64_t num_keys,
+                                   int64_t valid_bits);
+}
