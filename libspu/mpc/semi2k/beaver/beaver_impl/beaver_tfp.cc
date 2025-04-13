@@ -16,6 +16,8 @@
 
 #include <algorithm>
 #include <utility>
+#include <iostream>
+#include <chrono>
 
 #include "yacl/crypto/rand/rand.h"
 #include "yacl/link/algorithm/gather.h"
@@ -329,10 +331,28 @@ BeaverTfpUnsafe::Array BeaverTfpUnsafe::RandBit(FieldType field, int64_t size) {
   return std::move(*a.buf());
 }
 
+class PermTimer {
+public:
+    std::chrono::microseconds total_time{0};
+
+    void add(std::chrono::microseconds duration) {
+        total_time += duration;
+    }
+
+    ~PermTimer() {
+        std::cout << "Permutation_time: "
+                  << total_time.count() / 1000 << " ms\n";
+    }
+};
+
 BeaverTfpUnsafe::Pair BeaverTfpUnsafe::PermPair(
     FieldType field, int64_t size, size_t perm_rank,
     absl::Span<const int64_t> perm_vec) {
   constexpr char kTag[] = "BEAVER_TFP:PERM";
+
+  static PermTimer permTimer;
+
+  auto start = std::chrono::high_resolution_clock::now();
 
   std::vector<TrustedParty::Operand> ops(2);
   Shape shape({size});
@@ -362,6 +382,9 @@ BeaverTfpUnsafe::Pair BeaverTfpUnsafe::PermPair(
   Pair ret;
   ret.first = std::move(*a.buf());
   ret.second = std::move(*b.buf());
+
+  auto end = std::chrono::high_resolution_clock::now();
+  permTimer.add(std::chrono::duration_cast<std::chrono::microseconds>(end - start));
 
   return ret;
 }
