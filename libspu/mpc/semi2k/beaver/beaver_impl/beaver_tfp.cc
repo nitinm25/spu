@@ -342,15 +342,19 @@ public:
     ~PermTimer() {
         std::cout << "Permutation_time: "
                   << total_time.count() / 1000 << " ms\n";
+
+        std::ofstream outfile("/tmp/permutation_time.log", std::ios::app);
+        if (outfile.is_open()) {
+            outfile << "Permutation_time: " << total_time.count() / 1000 << " ms\n";
+            outfile.close();
+        }
+        
     }
 };
 
 BeaverTfpUnsafe::Pair BeaverTfpUnsafe::PermPair(
     FieldType field, int64_t size, size_t perm_rank,
     absl::Span<const int64_t> perm_vec) {
-
-
-  throw std::runtime_error("PermPair called");
 
   constexpr char kTag[] = "BEAVER_TFP:PERM";
 
