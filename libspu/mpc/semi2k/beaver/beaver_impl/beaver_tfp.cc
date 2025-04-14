@@ -340,7 +340,6 @@ public:
     }
 
     ~PermTimer() {
-        throw std::runtime_error("PermTimer destructor called");
         std::cout << "Permutation_time: "
                   << total_time.count() / 1000 << " ms\n";
     }
