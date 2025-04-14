@@ -340,6 +340,7 @@ public:
     }
 
     ~PermTimer() {
+        throw std::runtime_error("PermTimer destructor called");
         std::cout << "Permutation_time: "
                   << total_time.count() / 1000 << " ms\n";
     }
@@ -348,6 +349,10 @@ public:
 BeaverTfpUnsafe::Pair BeaverTfpUnsafe::PermPair(
     FieldType field, int64_t size, size_t perm_rank,
     absl::Span<const int64_t> perm_vec) {
+
+
+  throw std::runtime_error("PermPair called");
+
   constexpr char kTag[] = "BEAVER_TFP:PERM";
 
   static PermTimer permTimer;

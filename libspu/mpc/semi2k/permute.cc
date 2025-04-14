@@ -52,6 +52,8 @@ NdArrayRef SecureInvPerm(KernelEvalContext* ctx, const NdArrayRef& x,
   auto* beaver = ctx->getState<Semi2kState>()->beaver();
   auto numel = x.numel();
 
+  throw std::runtime_error("SecureInvPerm called");
+
   auto [a_buf, b_buf] = beaver->PermPair(field, numel, perm_rank, pv);
 
   NdArrayRef a(std::make_shared<yacl::Buffer>(std::move(a_buf)), x.eltype(),
